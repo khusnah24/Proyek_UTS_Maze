@@ -20,20 +20,70 @@ st.markdown("""
 
     /* ===== HEADER BANNER ===== */
     .hero-header {
-        background: linear-gradient(135deg, #064e3b 0%, #065f46 40%, #0f766e 100%);
-        border: 1px solid #10b981;
+        /* Background disamakan dengan tema labirin (ungu gelap) */
+        background: linear-gradient(135deg, #1a0033 0%, #2a0a4a 50%, #150025 100%);
+        border: 1px solid #7c3aed;
         border-radius: 16px;
         padding: 20px 28px;
         margin-bottom: 20px;
-        box-shadow: 0 0 30px rgba(16, 185, 129, 0.25);
+        box-shadow: 0 0 30px rgba(124, 58, 237, 0.25);
         display: flex;
         align-items: flex-start;
         gap: 18px;
+        position: relative;
+        overflow: hidden; /* Agar ulat tidak keluar */
     }
+
+    /* Animasi Ular/Ulat Berjalan di Background Header */
+    .snake-bg {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0.15; /* Dibuat transparan agar teks tetap terbaca */
+    }
+    .snake-segment {
+        position: absolute;
+        width: 16px; height: 16px;
+        background-color: #c084fc;
+        border-radius: 50%;
+        box-shadow: 0 0 10px #c084fc;
+        animation: moveSnake 8s linear infinite;
+    }
+    /* Keyframes untuk ulat berjalan zigzag */
+    @keyframes moveSnake {
+        0%   { top: 10%; left: -5%; }
+        15%  { top: 50%; left: 15%; }
+        30%  { top: 80%; left: 30%; }
+        45%  { top: 20%; left: 50%; }
+        60%  { top: 70%; left: 65%; }
+        75%  { top: 30%; left: 80%; }
+        100% { top: 50%; left: 105%; }
+    }
+    /* Menunda animasi tiap segmen agar terlihat seperti ular menyambung */
+    .snake-segment:nth-child(2) { animation-delay: 0.2s; }
+    .snake-segment:nth-child(3) { animation-delay: 0.4s; }
+    .snake-segment:nth-child(4) { animation-delay: 0.6s; }
+    .snake-segment:nth-child(5) { animation-delay: 0.8s; }
+    .snake-segment:nth-child(6) { animation-delay: 1.0s; }
+    .snake-segment:nth-child(7) { animation-delay: 1.2s; }
+    .snake-segment:nth-child(8) { animation-delay: 1.4s; }
+    .snake-segment:nth-child(9) { animation-delay: 1.6s; }
+    .snake-segment:nth-child(10){ animation-delay: 1.8s; }
+
+    .hero-content {
+        position: relative;
+        z-index: 1; /* Agar konten di atas animasi ulat */
+        display: flex;
+        align-items: flex-start;
+        gap: 18px;
+        width: 100%;
+    }
+
     .hero-icon {
         font-size: 42px;
-        background: rgba(16, 185, 129, 0.15);
-        border: 1px solid #10b981;
+        background: rgba(124, 58, 237, 0.15);
+        border: 1px solid #7c3aed;
         border-radius: 14px;
         padding: 10px 14px;
         line-height: 1;
@@ -41,13 +91,13 @@ st.markdown("""
     .hero-title {
         font-size: 32px;
         font-weight: 800;
-        color: #34d399;
+        color: #c084fc;
         margin: 0;
-        text-shadow: 0 0 20px rgba(52, 211, 153, 0.4);
+        text-shadow: 0 0 20px rgba(192, 132, 252, 0.4);
         font-family: 'Trebuchet MS', sans-serif;
     }
     .hero-subtitle {
-        color: #a7f3d0;
+        color: #a78bfa;
         font-size: 14px;
         margin: 6px 0 12px 0;
     }
@@ -56,39 +106,222 @@ st.markdown("""
         flex-wrap: wrap;
         gap: 8px;
     }
+    
+    /* Badge Interaktif */
     .hero-badge {
-        background: rgba(16, 185, 129, 0.15);
-        border: 1px solid #10b981;
-        color: #a7f3d0;
+        background: rgba(124, 58, 237, 0.15);
+        border: 1px solid #7c3aed;
+        color: #c084fc;
         font-size: 12px;
-        padding: 4px 12px;
+        padding: 6px 14px;
         border-radius: 999px;
         font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        user-select: none;
+    }
+    .hero-badge:hover {
+        background: rgba(124, 58, 237, 0.4);
+        transform: scale(1.05);
+        box-shadow: 0 0 10px rgba(192, 132, 252, 0.5);
+    }
+    
+    /* Panel Penjelasan Badge */
+    .badge-explanation {
+        display: none;
+        width: 100%;
+        margin-top: 15px;
+        padding: 10px 15px;
+        background: rgba(0, 0, 0, 0.4);
+        border-left: 4px solid #c084fc;
+        border-radius: 8px;
+        font-size: 13px;
+        color: #e0d0ff;
+        line-height: 1.5;
     }
 </style>
 """, unsafe_allow_html=True)
 
 # =========================================================
-# HERO HEADER
+# HERO HEADER DENGAN ULAT BERJALAN & BADGE INTERAKTIF
 # =========================================================
-st.markdown("""
+st.components.v1.html("""
+<style>
+    /* Style khusus dimasukkan ke dalam iframe agar terisolasi */
+    body { margin: 0; font-family: 'Trebuchet MS', sans-serif; }
+    .hero-header {
+        background: linear-gradient(135deg, #1a0033 0%, #2a0a4a 50%, #150025 100%);
+        border: 1px solid #7c3aed;
+        border-radius: 16px;
+        padding: 20px 28px;
+        box-shadow: 0 0 30px rgba(124, 58, 237, 0.25);
+        display: flex;
+        align-items: flex-start;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Animasi Ular/Ulat Berjalan */
+    .snake-bg {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0.2;
+    }
+    .snake-segment {
+        position: absolute;
+        width: 14px; height: 14px;
+        background-color: #c084fc;
+        border-radius: 50%;
+        box-shadow: 0 0 10px #c084fc;
+        animation: moveSnake 8s linear infinite;
+    }
+    @keyframes moveSnake {
+        0%   { top: 10%; left: -5%; }
+        15%  { top: 50%; left: 15%; }
+        30%  { top: 80%; left: 30%; }
+        45%  { top: 20%; left: 50%; }
+        60%  { top: 70%; left: 65%; }
+        75%  { top: 30%; left: 80%; }
+        100% { top: 50%; left: 105%; }
+    }
+    .snake-segment:nth-child(2) { animation-delay: 0.2s; }
+    .snake-segment:nth-child(3) { animation-delay: 0.4s; }
+    .snake-segment:nth-child(4) { animation-delay: 0.6s; }
+    .snake-segment:nth-child(5) { animation-delay: 0.8s; }
+    .snake-segment:nth-child(6) { animation-delay: 1.0s; }
+    .snake-segment:nth-child(7) { animation-delay: 1.2s; }
+    .snake-segment:nth-child(8) { animation-delay: 1.4s; }
+    .snake-segment:nth-child(9) { animation-delay: 1.6s; }
+    .snake-segment:nth-child(10){ animation-delay: 1.8s; }
+
+    .hero-content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: flex-start;
+        gap: 18px;
+        width: 100%;
+    }
+
+    .hero-icon {
+        font-size: 42px;
+        background: rgba(124, 58, 237, 0.15);
+        border: 1px solid #7c3aed;
+        border-radius: 14px;
+        padding: 10px 14px;
+        line-height: 1;
+    }
+    .hero-title {
+        font-size: 32px;
+        font-weight: 800;
+        color: #c084fc;
+        margin: 0;
+        text-shadow: 0 0 20px rgba(192, 132, 252, 0.4);
+    }
+    .hero-subtitle {
+        color: #a78bfa;
+        font-size: 14px;
+        margin: 6px 0 12px 0;
+    }
+    .hero-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    /* Badge Interaktif */
+    .hero-badge {
+        background: rgba(124, 58, 237, 0.15);
+        border: 1px solid #7c3aed;
+        color: #c084fc;
+        font-size: 12px;
+        padding: 6px 14px;
+        border-radius: 999px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        user-select: none;
+    }
+    .hero-badge:hover {
+        background: rgba(124, 58, 237, 0.4);
+        transform: scale(1.05);
+        box-shadow: 0 0 10px rgba(192, 132, 252, 0.5);
+    }
+    
+    /* Panel Penjelasan Badge */
+    .badge-explanation {
+        display: none;
+        width: 100%;
+        margin-top: 15px;
+        padding: 10px 15px;
+        background: rgba(0, 0, 0, 0.4);
+        border-left: 4px solid #c084fc;
+        border-radius: 8px;
+        font-size: 13px;
+        color: #e0d0ff;
+        line-height: 1.5;
+    }
+</style>
+
 <div class="hero-header">
-    <div class="hero-icon">🌌</div>
-    <div>
-        <h1 class="hero-title">Galaxy Maze Explorer</h1>
-        <div class="hero-subtitle">
-            Perbandingan algoritma BFS vs DFS pada labirin antariksa 21×21 — animasi langkah demi langkah
-        </div>
-        <div class="hero-badges">
-            <span class="hero-badge">Algoritma BFS</span>
-            <span class="hero-badge">Algoritma DFS</span>
-            <span class="hero-badge">Graf Tak Berbobot</span>
-            <span class="hero-badge">Validasi Otomatis</span>
-            <span class="hero-badge">Grid 21×21</span>
+    <!-- Animasi Ular Latar Belakang -->
+    <div class="snake-bg">
+        <div class="snake-segment"></div>
+        <div class="snake-segment"></div>
+        <div class="snake-segment"></div>
+        <div class="snake-segment"></div>
+        <div class="snake-segment"></div>
+        <div class="snake-segment"></div>
+        <div class="snake-segment"></div>
+        <div class="snake-segment"></div>
+        <div class="snake-segment"></div>
+        <div class="snake-segment"></div>
+    </div>
+
+    <div class="hero-content">
+        <div class="hero-icon">🌌</div>
+        <div style="width: 100%;">
+            <h1 class="hero-title">Galaxy Maze Explorer</h1>
+            <div class="hero-subtitle">
+                Perbandingan algoritma BFS vs DFS pada labirin antariksa 21×21 — animasi langkah demi langkah
+            </div>
+            <div class="hero-badges">
+                <div class="hero-badge" onclick="showInfo('BFS')">Algoritma BFS</div>
+                <div class="hero-badge" onclick="showInfo('DFS')">Algoritma DFS</div>
+                <div class="hero-badge" onclick="showInfo('Graf')">Graf Tak Berbobot</div>
+                <div class="hero-badge" onclick="showInfo('Validasi')">Validasi Otomatis</div>
+                <div class="hero-badge" onclick="showInfo('Grid')">Grid 21×21</div>
+            </div>
+            
+            <!-- Tempat Penjelasan -->
+            <div id="badgeExplanation" class="badge-explanation"></div>
         </div>
     </div>
 </div>
-""", unsafe_allow_html=True)
+
+<script>
+    const explanations = {
+        'BFS': '<b>BFS (Breadth-First Search):</b> Menjelajah graf secara melebar. Sangat cocok untuk mencari rute terpendek pada graf tak berbobot.',
+        'DFS': '<b>DFS (Depth-First Search):</b> Menjelajah graf secara mendalam. Tidak menjamin rute terpendek, tapi bisa lebih hemat memori.',
+        'Graf': '<b>Graf Tak Berbobot:</b> Setiap langkah/sisi memiliki bobot yang sama (1). Titik adalah sel kosong, sisi adalah jalan bersebelahan.',
+        'Validasi': '<b>Validasi Otomatis:</b> Sistem memeriksa apakah jalur menembus dinding dan membuktikan BFS selalu menemukan jalur minimum.',
+        'Grid': '<b>Grid 21×21:</b> Labirin berukuran 21 baris dan 21 kolom. Titik awal (Astronot) dan target (UFO) dapat dipindahkan.'
+    };
+
+    function showInfo(key) {
+        const box = document.getElementById('badgeExplanation');
+        if (box.style.display === 'block' && box.innerHTML === explanations[key]) {
+            // Jika diklik lagi, sembunyikan
+            box.style.display = 'none';
+        } else {
+            box.innerHTML = explanations[key];
+            box.style.display = 'block';
+        }
+    }
+</script>
+""", height=260)
 
 # =========================================================
 # DATA LABIRIN (10x10 / Grid 21x21)
@@ -122,7 +355,7 @@ maze = [[int(x) for x in row] for row in rows]
 maze_json = json.dumps(maze)
 
 # =========================================================
-# HTML + JS
+# HTML + JS LABIRIN (Sama seperti sebelumnya)
 # =========================================================
 html_code = f"""
 <!DOCTYPE html>
@@ -257,8 +490,6 @@ html_code = f"""
         .validation-box h4 {{ margin: 0 0 8px 0; font-size: 13px; color: #60a5fa; }}
         .validation-box ul {{ margin: 5px 0 0 0; padding-left: 18px; }}
         .validation-box li {{ margin-bottom: 5px; }}
-        .val-ok {{ color: #34d399; font-weight: bold; }}
-        .val-warn {{ color: #fbbf24; font-weight: bold; }}
         
         .instruction {{
             text-align: center; 
@@ -356,7 +587,6 @@ html_code = f"""
         let speedMs = 200; 
         let clickMode = 'START';
 
-        // Menyimpan hasil BFS & DFS untuk panel perbandingan & validasi
         let resultBFS = null;
         let resultDFS = null;
 
@@ -457,7 +687,6 @@ html_code = f"""
                 document.getElementById('dfsStats').innerHTML = `${{visitedText}}<br>${{stepText}}`;
             }}
 
-            // Simpan hasil untuk validasi
             if (isSuccess) {{
                 if (currentAlgo === 'BFS') {{
                     resultBFS = {{ pathLen: state.path.length, visited: state.visited.length, path: state.path }};
@@ -489,9 +718,6 @@ html_code = f"""
             }}
         }}
 
-        // =========================================================
-        // VALIDASI OTOMATIS
-        // =========================================================
         function runValidation() {{
             const box = document.getElementById('validationBox');
             const content = document.getElementById('validationContent');
@@ -504,7 +730,6 @@ html_code = f"""
             box.style.display = 'block';
             let html = '<ul>';
             
-            // 1. Validasi: lintasan tidak menembus dinding
             let wallCheck = true;
             if (resultBFS) {{
                 for (let p of resultBFS.path) {{
@@ -522,12 +747,10 @@ html_code = f"""
                 html += '<li>❌ <b>VALIDASI GAGAL</b> — lintasan menembus dinding!</li>';
             }}
             
-            // 2. Validasi: BFS = lintasan minimum
             if (resultBFS) {{
                 html += `<li>✅ <b>BFS menjamin lintasan minimum</b> pada graf tak berbobot. Panjang lintasan BFS = <b>${{resultBFS.pathLen - 1}}</b> sisi (langkah).</li>`;
             }}
             
-            // 3. Validasi: DFS tidak dijamin minimum
             if (resultDFS && resultBFS) {{
                 if (resultDFS.pathLen > resultBFS.pathLen) {{
                     html += `<li>⚠️ <b>DFS tidak minimum</b>: panjang DFS = <b>${{resultDFS.pathLen - 1}}</b> sisi, sedangkan BFS = <b>${{resultBFS.pathLen - 1}}</b> sisi. Selisih <b>${{resultDFS.pathLen - resultBFS.pathLen}}</b> sisi.</li>`;
