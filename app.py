@@ -11,7 +11,6 @@ st.set_page_config(
     layout="wide",
 )
 
-# CSS Global & Header
 st.markdown("""
 <style>
     .stApp {
@@ -22,9 +21,9 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # =========================================================
-# HERO HEADER DENGAN ULAT BERJALAN JELAS & BADGE INTERAKTIF
+# HERO HEADER DENGAN ULAT BERJALAN & MODAL CUSTOM
 # =========================================================
-st.components.v1.html("""
+components.html("""
 <style>
     body { margin: 0; font-family: 'Trebuchet MS', sans-serif; }
     .hero-header {
@@ -37,10 +36,10 @@ st.components.v1.html("""
         align-items: flex-start;
         position: relative;
         overflow: hidden;
-        height: 180px; /* Tinggi fix agar rapi */
+        height: 180px;
     }
 
-    /* Animasi Ular/Ulat Berjalan - Dibuat lebih jelas */
+    /* Animasi Ular */
     .snake-container {
         position: absolute;
         top: 0; left: 0; width: 100%; height: 100%;
@@ -56,7 +55,6 @@ st.components.v1.html("""
         animation: moveSnake 10s linear infinite;
         opacity: 0.8;
     }
-    /* Membuat efek ular menyambung dengan delay */
     @keyframes moveSnake {
         0%   { top: 10%; left: -5%;  transform: scale(1); }
         15%  { top: 60%; left: 15%;  transform: scale(0.9); }
@@ -129,22 +127,62 @@ st.components.v1.html("""
         transform: scale(1.05);
         box-shadow: 0 0 10px rgba(192, 132, 252, 0.5);
     }
+
+    /* ====== CUSTOM MODAL POP-UP ====== */
+    .custom-modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.6);
+        z-index: 100;
+        justify-content: center;
+        align-items: center;
+    }
+    .custom-modal-box {
+        background: linear-gradient(135deg, #1a0033 0%, #2a0a4a 100%);
+        border: 1px solid #7c3aed;
+        border-radius: 12px;
+        padding: 20px;
+        max-width: 450px;
+        width: 80%;
+        box-shadow: 0 0 40px rgba(124, 58, 237, 0.6);
+        color: #e0d0ff;
+        text-align: left;
+        position: relative;
+    }
+    .custom-modal-title {
+        color: #c084fc;
+        font-size: 18px;
+        margin-top: 0;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+    .custom-modal-body {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+    .custom-modal-close {
+        background: #7c3aed;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-top: 15px;
+        font-weight: bold;
+        float: right;
+    }
+    .custom-modal-close:hover {
+        background: #c084fc;
+    }
 </style>
 
 <div class="hero-header">
     <div class="snake-container">
-        <div class="snake-segment"></div>
-        <div class="snake-segment"></div>
-        <div class="snake-segment"></div>
-        <div class="snake-segment"></div>
-        <div class="snake-segment"></div>
-        <div class="snake-segment"></div>
-        <div class="snake-segment"></div>
-        <div class="snake-segment"></div>
-        <div class="snake-segment"></div>
-        <div class="snake-segment"></div>
-        <div class="snake-segment"></div>
-        <div class="snake-segment"></div>
+        <div class="snake-segment"></div><div class="snake-segment"></div><div class="snake-segment"></div>
+        <div class="snake-segment"></div><div class="snake-segment"></div><div class="snake-segment"></div>
+        <div class="snake-segment"></div><div class="snake-segment"></div><div class="snake-segment"></div>
+        <div class="snake-segment"></div><div class="snake-segment"></div><div class="snake-segment"></div>
     </div>
 
     <div class="hero-content">
@@ -155,13 +193,22 @@ st.components.v1.html("""
                 Perbandingan algoritma BFS vs DFS pada labirin antariksa 21×21 — animasi langkah demi langkah
             </div>
             <div class="hero-badges">
-                <div class="hero-badge" onclick="showInfo('BFS')">Algoritma BFS</div>
-                <div class="hero-badge" onclick="showInfo('DFS')">Algoritma DFS</div>
-                <div class="hero-badge" onclick="showInfo('Graf')">Graf Tak Berbobot</div>
-                <div class="hero-badge" onclick="showInfo('Validasi')">Validasi Otomatis</div>
-                <div class="hero-badge" onclick="showInfo('Grid')">Grid 21×21</div>
+                <div class="hero-badge" onclick="showModal('BFS')">Algoritma BFS</div>
+                <div class="hero-badge" onclick="showModal('DFS')">Algoritma DFS</div>
+                <div class="hero-badge" onclick="showModal('Graf')">Graf Tak Berbobot</div>
+                <div class="hero-badge" onclick="showModal('Validasi')">Validasi Otomatis</div>
+                <div class="hero-badge" onclick="showModal('Grid')">Grid 21×21</div>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- Custom Modal HTML -->
+<div id="infoModal" class="custom-modal-overlay">
+    <div class="custom-modal-box">
+        <h3 id="modalTitle" class="custom-modal-title">Judul</h3>
+        <div id="modalBody" class="custom-modal-body">Isi penjelasan...</div>
+        <button class="custom-modal-close" onclick="closeModal()">Tutup</button>
     </div>
 </div>
 
@@ -173,14 +220,28 @@ st.components.v1.html("""
         'Validasi': '<b>Validasi Otomatis:</b> Sistem memeriksa apakah jalur menembus dinding dan membuktikan BFS selalu menemukan jalur minimum.',
         'Grid': '<b>Grid 21×21:</b> Labirin berukuran 21 baris dan 21 kolom. Titik awal (Astronot) dan target (UFO) dapat dipindahkan.'
     };
-    function showInfo(key) {
-        alert(explanations[key].replace(/<[^>]*>?/gm, '')); // Alert sederhana karena di dalam iframe
+
+    function showModal(key) {
+        document.getElementById('modalTitle').innerText = key === 'Graf' ? 'Graf Tak Berbobot' : key;
+        document.getElementById('modalBody').innerHTML = explanations[key];
+        document.getElementById('infoModal').style.display = 'flex';
     }
+
+    function closeModal() {
+        document.getElementById('infoModal').style.display = 'none';
+    }
+
+    // Menutup modal jika klik di luar kotak
+    document.getElementById('infoModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
 </script>
 """, height=200)
 
 # =========================================================
-# DATA LABIRIN
+# DATA LABIRIN (10x10 / Grid 21x21)
 # =========================================================
 maze_raw = """
 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
@@ -211,7 +272,7 @@ maze = [[int(x) for x in row] for row in rows]
 maze_json = json.dumps(maze)
 
 # =========================================================
-# HTML + JS LABIRIN (Sama seperti sebelumnya)
+# HTML + JS LABIRIN
 # =========================================================
 html_code = f"""
 <!DOCTYPE html>
@@ -797,9 +858,6 @@ html_code = f"""
 </html>
 """
 
-# =========================================================
-# RENDER LABIRIN
-# =========================================================
 components.html(html_code, height=750)
 
 # =========================================================
