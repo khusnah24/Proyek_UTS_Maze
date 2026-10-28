@@ -17,67 +17,78 @@ st.markdown("""
         background: radial-gradient(circle at 50% 50%, #1a0033 0%, #0a0014 60%, #000000 100%);
         color: #e0d0ff;
     }
-    h1 { 
-        color: #c084fc !important; 
-        text-shadow: 0 0 20px #7c3aed, 0 0 40px #4c1d95;
+
+    /* ===== HEADER BANNER ===== */
+    .hero-header {
+        background: linear-gradient(135deg, #064e3b 0%, #065f46 40%, #0f766e 100%);
+        border: 1px solid #10b981;
+        border-radius: 16px;
+        padding: 20px 28px;
+        margin-bottom: 20px;
+        box-shadow: 0 0 30px rgba(16, 185, 129, 0.25);
+        display: flex;
+        align-items: flex-start;
+        gap: 18px;
+    }
+    .hero-icon {
+        font-size: 42px;
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid #10b981;
+        border-radius: 14px;
+        padding: 10px 14px;
+        line-height: 1;
+    }
+    .hero-title {
+        font-size: 32px;
+        font-weight: 800;
+        color: #34d399;
+        margin: 0;
+        text-shadow: 0 0 20px rgba(52, 211, 153, 0.4);
         font-family: 'Trebuchet MS', sans-serif;
     }
-    /* Styling Sidebar agar senada dengan tema galaksi */
-    [data-testid="stSidebar"] {
-        background-color: #120022 !important;
-        border-right: 1px solid #4c1d95;
+    .hero-subtitle {
+        color: #a7f3d0;
+        font-size: 14px;
+        margin: 6px 0 12px 0;
+    }
+    .hero-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .hero-badge {
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid #10b981;
+        color: #a7f3d0;
+        font-size: 12px;
+        padding: 4px 12px;
+        border-radius: 999px;
+        font-weight: 600;
     }
 </style>
 """, unsafe_allow_html=True)
 
 # =========================================================
-# SIDEBAR PENGATURAN (Mirip temen kamu)
+# HERO HEADER
 # =========================================================
-with st.sidebar:
-    st.markdown("## ⚙️ Pengaturan Simulasi")
-    st.markdown("Atur mode dan jalankan animasi labirin di sini.")
-    
-    # Mode Selector
-    st.markdown("### 📍 Mode Klik Peta")
-    click_mode = st.radio(
-        "Pilih objek yang ingin dipindahkan:",
-        ("Start (Astronot)", "Target (UFO)"),
-        help="Setelah memilih, klik kotak kosong di peta untuk memindahkannya."
-    )
-    
-    st.markdown("---")
-    
-    # Tombol Algoritma
-    st.markdown("### 🚀 Jalankan Algoritma")
-    col1, col2 = st.columns(2)
-    with col1:
-        btn_bfs = st.button("🔵 BFS", use_container_width=True)
-    with col2:
-        btn_dfs = st.button("🔴 DFS", use_container_width=True)
-        
-    st.markdown("---")
-    
-    # Kontrol Animasi
-    st.markdown("### 🎮 Kontrol Animasi")
-    col3, col4 = st.columns(2)
-    with col3:
-        btn_back = st.button("⏮️ Mundur", use_container_width=True)
-    with col4:
-        btn_forward = st.button("⏭️ Maju", use_container_width=True)
-        
-    col5, col6 = st.columns(2)
-    with col5:
-        btn_play = st.button("▶️ Play", use_container_width=True)
-    with col6:
-        btn_stop = st.button("⏸️ Jeda", use_container_width=True)
-        
-    btn_reset = st.button("🔄 Ulang Animasi", use_container_width=True)
-    
-    st.markdown("---")
-    
-    # Slider Kecepatan
-    st.markdown("### ⏱️ Kecepatan Animasi")
-    speed_val = st.slider("Pilih kecepatan (ms):", min_value=10, max_value=1000, value=200, step=10)
+st.markdown("""
+<div class="hero-header">
+    <div class="hero-icon">🌌</div>
+    <div>
+        <h1 class="hero-title">Galaxy Maze Explorer</h1>
+        <div class="hero-subtitle">
+            Perbandingan algoritma BFS vs DFS pada labirin antariksa 21×21 — animasi langkah demi langkah
+        </div>
+        <div class="hero-badges">
+            <span class="hero-badge">Algoritma BFS</span>
+            <span class="hero-badge">Algoritma DFS</span>
+            <span class="hero-badge">Graf Tak Berbobot</span>
+            <span class="hero-badge">Validasi Otomatis</span>
+            <span class="hero-badge">Grid 21×21</span>
+        </div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
 # =========================================================
 # DATA LABIRIN (10x10 / Grid 21x21)
@@ -111,7 +122,7 @@ maze = [[int(x) for x in row] for row in rows]
 maze_json = json.dumps(maze)
 
 # =========================================================
-# HTML + JS (UI Labirin & Panel Kanan)
+# HTML + JS
 # =========================================================
 html_code = f"""
 <!DOCTYPE html>
@@ -119,7 +130,7 @@ html_code = f"""
 <head>
     <style>
         body {{
-            background-color: transparent; /* Transparan agar menyatu dengan Streamlit */
+            background-color: transparent;
             font-family: 'Trebuchet MS', sans-serif;
             color: #e0d0ff;
             margin: 0;
@@ -143,10 +154,41 @@ html_code = f"""
             border-radius: 15px;
             border: 2px solid #4c1d95;
             box-shadow: inset 0 0 25px #2a0a4a;
+            margin-bottom: 15px;
             cursor: crosshair;
         }}
+        .controls {{
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }}
+        button {{
+            background: linear-gradient(135deg, #6d28d9, #9333ea);
+            color: white;
+            border: 1px solid #a78bfa;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 0 10px #7c3aed;
+            transition: all 0.2s;
+        }}
+        button:hover {{
+            background: linear-gradient(135deg, #7c3aed, #c084fc);
+            box-shadow: 0 0 20px #c084fc;
+            transform: scale(1.05);
+        }}
+        .slider-container {{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #a78bfa;
+        }}
+        input[type="range"] {{ accent-color: #c084fc; width: 150px; }}
         
-        /* CSS UNTUK PANEL KANAN (DATA & KESIMPULAN) */
         .right-panel {{
             width: 320px; 
             background: rgba(40, 10, 80, 0.6);
@@ -157,7 +199,7 @@ html_code = f"""
             display: flex;
             flex-direction: column;
             gap: 12px;
-            max-height: 520px; 
+            max-height: 580px; 
             overflow-y: auto; 
         }}
         .right-panel::-webkit-scrollbar {{ width: 8px; }}
@@ -201,6 +243,22 @@ html_code = f"""
         .conclusion-box h4 {{ margin: 0 0 8px 0; font-size: 13px; color: #10b981; }}
         .conclusion-box ul {{ margin: 5px 0 0 0; padding-left: 18px; }}
         .conclusion-box li {{ margin-bottom: 5px; }}
+
+        .validation-box {{
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid #3b82f6;
+            padding: 12px; 
+            border-radius: 8px;
+            font-size: 12px;
+            line-height: 1.5;
+            color: #dbeafe;
+            display: none;
+        }}
+        .validation-box h4 {{ margin: 0 0 8px 0; font-size: 13px; color: #60a5fa; }}
+        .validation-box ul {{ margin: 5px 0 0 0; padding-left: 18px; }}
+        .validation-box li {{ margin-bottom: 5px; }}
+        .val-ok {{ color: #34d399; font-weight: bold; }}
+        .val-warn {{ color: #fbbf24; font-weight: bold; }}
         
         .instruction {{
             text-align: center; 
@@ -214,9 +272,26 @@ html_code = f"""
 <body>
     <div class="main-wrapper">
         <div class="left-panel">
+            <div class="mode-selector">
+                <button id="modeStart" class="mode-btn active">📍 Pindahkan Start</button>
+                <button id="modeTarget" class="mode-btn">🎯 Pindahkan Target</button>
+            </div>
+
             <canvas id="mazeCanvas" width="500" height="500"></canvas>
-            <div class="instruction" style="margin-top: 10px;">
-                💡 <b>Mode Aktif:</b> <span id="activeModeText">📍 Start (Astronot)</span>
+            
+            <div class="controls">
+                <button id="btnBFS">🔵 BFS</button>
+                <button id="btnDFS">🔴 DFS</button>
+                <button id="btnBack">⏮️ Mundur</button>
+                <button id="btnPlay">▶️ Play</button>
+                <button id="btnStop">⏸️ Jeda</button>
+                <button id="btnForward">⏭️ Maju</button>
+                <button id="btnReset">🔄 Ulang</button>
+            </div>
+            <div class="slider-container">
+                <label>Kecepatan:</label>
+                <input type="range" id="speedSlider" min="10" max="1000" value="200" step="10">
+                <span id="speedValue">200 ms</span>
             </div>
         </div>
 
@@ -246,13 +321,18 @@ html_code = f"""
                 <div id="descContent"></div>
             </div>
 
+            <div id="validationBox" class="validation-box">
+                <h4>🔍 Validasi Otomatis</h4>
+                <div id="validationContent"></div>
+            </div>
+
             <div id="conclusionBox" class="conclusion-box">
                 <h4>🎉 Kesimpulan & Perbandingan</h4>
                 <div id="conclusionContent"></div>
             </div>
             
             <div id="instructionText" class="instruction">
-                Pilih algoritma di panel kiri untuk memulai.
+                Klik tombol BFS atau DFS untuk melihat perbandingan data.
             </div>
         </div>
     </div>
@@ -273,58 +353,12 @@ html_code = f"""
         let currentFrame = 0;
         let currentAlgo = '';
         let playInterval = null;
-        let speedMs = {speed_val}; // Diambil dari Streamlit sidebar
+        let speedMs = 200; 
         let clickMode = 'START';
 
-        // Menangkap event klik dari Streamlit Sidebar
-        window.addEventListener('message', (event) => {{
-            const data = event.data;
-            if (data.type === 'streamlit:setComponentValue') {{
-                // Ignored, using click events via buttons
-            }}
-        }});
-
-        // Fungsi untuk menerima perintah dari Streamlit
-        function handleStreamlitAction(action) {{
-            if (action === 'MODE_START') {{
-                clickMode = 'START';
-                document.getElementById('activeModeText').innerHTML = '📍 Start (Astronot)';
-            }} else if (action === 'MODE_TARGET') {{
-                clickMode = 'TARGET';
-                document.getElementById('activeModeText').innerHTML = '🎯 Target (UFO)';
-            }} else if (action === 'BFS') {{
-                generateHistory('BFS');
-            }} else if (action === 'DFS') {{
-                generateHistory('DFS');
-            }} else if (action === 'PLAY') {{
-                if (history.length > 0 && !playInterval) {{
-                    playInterval = setInterval(() => {{
-                        if (currentFrame < history.length - 1) {{
-                            currentFrame++;
-                            renderFrame();
-                        }} else {{
-                            clearInterval(playInterval);
-                            playInterval = null;
-                        }}
-                    }}, speedMs);
-                }}
-            }} else if (action === 'STOP') {{
-                clearInterval(playInterval); 
-                playInterval = null;
-            }} else if (action === 'BACK') {{
-                clearInterval(playInterval); playInterval = null;
-                if (currentFrame > 0) {{ currentFrame--; renderFrame(); }}
-            }} else if (action === 'FORWARD') {{
-                clearInterval(playInterval); playInterval = null;
-                if (currentFrame < history.length - 1) {{ currentFrame++; renderFrame(); }}
-            }} else if (action === 'RESET') {{
-                clearInterval(playInterval); playInterval = null;
-                if (history.length > 0) {{
-                    currentFrame = 0;
-                    renderFrame();
-                }}
-            }}
-        }}
+        // Menyimpan hasil BFS & DFS untuk panel perbandingan & validasi
+        let resultBFS = null;
+        let resultDFS = null;
 
         function drawEmoji(emoji, r, c, sizeMultiplier = 1) {{
             ctx.font = `${{cellSize * sizeMultiplier}}px Arial`;
@@ -423,6 +457,16 @@ html_code = f"""
                 document.getElementById('dfsStats').innerHTML = `${{visitedText}}<br>${{stepText}}`;
             }}
 
+            // Simpan hasil untuk validasi
+            if (isSuccess) {{
+                if (currentAlgo === 'BFS') {{
+                    resultBFS = {{ pathLen: state.path.length, visited: state.visited.length, path: state.path }};
+                }} else {{
+                    resultDFS = {{ pathLen: state.path.length, visited: state.visited.length, path: state.path }};
+                }}
+                runValidation();
+            }}
+
             const conclusionBox = document.getElementById('conclusionBox');
             if (isSuccess) {{
                 conclusionBox.style.display = 'block';
@@ -443,6 +487,63 @@ html_code = f"""
             }} else {{
                 conclusionBox.style.display = 'none';
             }}
+        }}
+
+        // =========================================================
+        // VALIDASI OTOMATIS
+        // =========================================================
+        function runValidation() {{
+            const box = document.getElementById('validationBox');
+            const content = document.getElementById('validationContent');
+            
+            if (!resultBFS && !resultDFS) {{
+                box.style.display = 'none';
+                return;
+            }}
+            
+            box.style.display = 'block';
+            let html = '<ul>';
+            
+            // 1. Validasi: lintasan tidak menembus dinding
+            let wallCheck = true;
+            if (resultBFS) {{
+                for (let p of resultBFS.path) {{
+                    if (maze[p[0]][p[1]] === 1) {{ wallCheck = false; break; }}
+                }}
+            }}
+            if (resultDFS) {{
+                for (let p of resultDFS.path) {{
+                    if (maze[p[0]][p[1]] === 1) {{ wallCheck = false; break; }}
+                }}
+            }}
+            if (wallCheck) {{
+                html += '<li>✅ <b>Lintasan tidak menembus dinding</b> — semua titik pada jalur bernilai 0 (bukan dinding).</li>';
+            }} else {{
+                html += '<li>❌ <b>VALIDASI GAGAL</b> — lintasan menembus dinding!</li>';
+            }}
+            
+            // 2. Validasi: BFS = lintasan minimum
+            if (resultBFS) {{
+                html += `<li>✅ <b>BFS menjamin lintasan minimum</b> pada graf tak berbobot. Panjang lintasan BFS = <b>${{resultBFS.pathLen - 1}}</b> sisi (langkah).</li>`;
+            }}
+            
+            // 3. Validasi: DFS tidak dijamin minimum
+            if (resultDFS && resultBFS) {{
+                if (resultDFS.pathLen > resultBFS.pathLen) {{
+                    html += `<li>⚠️ <b>DFS tidak minimum</b>: panjang DFS = <b>${{resultDFS.pathLen - 1}}</b> sisi, sedangkan BFS = <b>${{resultBFS.pathLen - 1}}</b> sisi. Selisih <b>${{resultDFS.pathLen - resultBFS.pathLen}}</b> sisi.</li>`;
+                }} else if (resultDFS.pathLen === resultBFS.pathLen) {{
+                    html += `<li>ℹ️ <b>DFS kebetulan sama panjang</b> dengan BFS (${{resultDFS.pathLen - 1}} sisi), tetapi ini <i>tidak dijamin</i> secara umum.</li>`;
+                }}
+            }} else if (resultDFS) {{
+                html += `<li>ℹ️ <b>DFS belum dibandingkan</b> — jalankan BFS juga untuk memverifikasi apakah lintasan DFS minimum.</li>`;
+            }}
+            
+            html += '</ul>';
+            html += '<div style="margin-top:8px; padding-top:8px; border-top:1px dashed #3b82f6; font-size:11px; color:#93c5fd;">';
+            html += '<b>Urutan tetangga yang dipakai:</b> Bawah → Atas → Kanan → Kiri (diurutkan berdasarkan baris lalu kolom). Urutan ini konsisten agar perbandingan dapat diulang.';
+            html += '</div>';
+            
+            content.innerHTML = html;
         }}
 
         function getNeighbors(r, c) {{
@@ -476,10 +577,10 @@ html_code = f"""
             
             if (algo === 'BFS') {{
                 descTitle.innerHTML = "🔵 Teori BFS";
-                descContent.innerHTML = "<b>BFS (Breadth):</b> Menyebar rata seperti air. <i>Dijamin menemukan rute terpendek</i>, tapi memeriksa banyak titik.";
+                descContent.innerHTML = "<b>BFS (Breadth-First Search):</b> Menyebar rata seperti air. <i>Dijamin menemukan rute terpendek</i> pada graf tak berbobot karena memeriksa semua simpul pada level yang sama sebelum lanjut ke level berikutnya.";
             }} else {{
                 descTitle.innerHTML = "🔴 Teori DFS";
-                descContent.innerHTML = "<b>DFS (Depth):</b> Menyusuri satu jalur sampai buntu baru mundur. <i>Tidak menjamin terpendek</i>, tapi bisa lebih cepat jika beruntung.";
+                descContent.innerHTML = "<b>DFS (Depth-First Search):</b> Menyusuri satu jalur sampai buntu baru mundur. <i>Tidak menjamin rute terpendek</i>, tetapi bisa memeriksa lebih sedikit titik jika kebetulan menemukan target lebih awal.";
             }}
 
             if (algo === 'BFS') {{
@@ -537,12 +638,77 @@ html_code = f"""
                 
                 history = []; 
                 currentFrame = 0;
+                resultBFS = null;
+                resultDFS = null;
                 drawBaseMap();
                 document.getElementById('descBox').style.display = 'none';
                 document.getElementById('conclusionBox').style.display = 'none';
+                document.getElementById('validationBox').style.display = 'none';
                 document.getElementById('instructionText').style.display = 'block';
                 document.getElementById('bfsStats').innerHTML = 'Menunggu simulasi...';
                 document.getElementById('dfsStats').innerHTML = 'Menunggu simulasi...';
+            }}
+        }});
+
+        document.getElementById('modeStart').addEventListener('click', (e) => {{
+            clickMode = 'START';
+            e.target.classList.add('active');
+            document.getElementById('modeTarget').classList.remove('active');
+        }});
+
+        document.getElementById('modeTarget').addEventListener('click', (e) => {{
+            clickMode = 'TARGET';
+            e.target.classList.add('active');
+            document.getElementById('modeStart').classList.remove('active');
+        }});
+
+        document.getElementById('btnBFS').addEventListener('click', () => {{ generateHistory('BFS'); }});
+        document.getElementById('btnDFS').addEventListener('click', () => {{ generateHistory('DFS'); }});
+        
+        document.getElementById('btnPlay').addEventListener('click', () => {{
+            if (history.length === 0) return;
+            if (playInterval) return;
+            playInterval = setInterval(() => {{
+                if (currentFrame < history.length - 1) {{
+                    currentFrame++;
+                    renderFrame();
+                }} else {{
+                    clearInterval(playInterval);
+                    playInterval = null;
+                }}
+            }}, speedMs);
+        }});
+
+        document.getElementById('btnStop').addEventListener('click', () => {{
+            clearInterval(playInterval); 
+            playInterval = null;
+        }});
+
+        document.getElementById('btnBack').addEventListener('click', () => {{
+            clearInterval(playInterval); playInterval = null;
+            if (currentFrame > 0) {{ currentFrame--; renderFrame(); }}
+        }});
+
+        document.getElementById('btnForward').addEventListener('click', () => {{
+            clearInterval(playInterval); playInterval = null;
+            if (currentFrame < history.length - 1) {{ currentFrame++; renderFrame(); }}
+        }});
+
+        document.getElementById('btnReset').addEventListener('click', () => {{
+            clearInterval(playInterval); playInterval = null;
+            if (history.length > 0) {{
+                currentFrame = 0;
+                renderFrame();
+            }}
+        }});
+
+        document.getElementById('speedSlider').addEventListener('input', (e) => {{
+            speedMs = parseInt(e.target.value);
+            document.getElementById('speedValue').innerText = speedMs + ' ms';
+            if (playInterval) {{
+                clearInterval(playInterval);
+                playInterval = null;
+                document.getElementById('btnPlay').click();
             }}
         }});
 
@@ -552,31 +718,4 @@ html_code = f"""
 </html>
 """
 
-# =========================================================
-# MENGHUBUNGKAN SIDEBAR KE DALAM HTML/JS
-# =========================================================
-# Kita menggunakan trik query param / session state untuk mengirim perintah ke iframe HTML
-# Karena components.html tidak bisa langsung mendengar klik streamlit, 
-# kita inject script JS yang otomatis terpanggil saat tombol diklik.
-
-# Menyiapkan instruksi berdasarkan tombol yang diklik
-action_script = ""
-if btn_bfs: action_script = "handleStreamlitAction('BFS');"
-elif btn_dfs: action_script = "handleStreamlitAction('DFS');"
-elif btn_play: action_script = "handleStreamlitAction('PLAY');"
-elif btn_stop: action_script = "handleStreamlitAction('STOP');"
-elif btn_back: action_script = "handleStreamlitAction('BACK');"
-elif btn_forward: action_script = "handleStreamlitAction('FORWARD');"
-elif btn_reset: action_script = "handleStreamlitAction('RESET');"
-
-if click_mode == "Start (Astronot)":
-    action_script += "handleStreamlitAction('MODE_START');"
-else:
-    action_script += "handleStreamlitAction('MODE_TARGET');"
-
-# Suntikkan script ke dalam HTML jika ada aksi
-if action_script:
-    html_code = html_code.replace("drawBaseMap();", f"drawBaseMap();\n        {action_script}")
-
-# Perhatikan bagian ini: height disesuaikan agar pas
-components.html(html_code, height=600)
+components.html(html_code, height=750)
