@@ -21,11 +21,12 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # =========================================================
-# HERO HEADER DENGAN ULAT BERJALAN & MODAL CUSTOM
+# HERO HEADER DENGAN ULAT BERJALAN, NAMA, & MODAL DROPDOWN
 # =========================================================
 components.html("""
 <style>
     body { margin: 0; font-family: 'Trebuchet MS', sans-serif; }
+    
     .hero-header {
         background: linear-gradient(135deg, #1a0033 0%, #2a0a4a 50%, #150025 100%);
         border: 1px solid #7c3aed;
@@ -33,10 +34,9 @@ components.html("""
         padding: 20px 28px;
         box-shadow: 0 0 30px rgba(124, 58, 237, 0.25);
         display: flex;
-        align-items: flex-start;
+        flex-direction: column; 
         position: relative;
         overflow: hidden;
-        height: 180px;
     }
 
     /* Animasi Ular */
@@ -93,6 +93,15 @@ components.html("""
         padding: 10px 14px;
         line-height: 1;
     }
+    
+    /* Container Judul & Nama */
+    .title-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+    
     .hero-title {
         font-size: 32px;
         font-weight: 800;
@@ -100,6 +109,29 @@ components.html("""
         margin: 0;
         text-shadow: 0 0 20px rgba(192, 132, 252, 0.4);
     }
+    
+    /* Gaya untuk Identitas Mahasiswa */
+    .student-info {
+        background: rgba(124, 58, 237, 0.15);
+        border: 1px solid #7c3aed;
+        padding: 8px 16px;
+        border-radius: 8px;
+        text-align: right;
+        box-shadow: 0 0 15px rgba(124, 58, 237, 0.3);
+    }
+    .student-name {
+        display: block;
+        font-size: 14px;
+        font-weight: bold;
+        color: #e0d0ff;
+        margin-bottom: 2px;
+    }
+    .student-nim {
+        display: block;
+        font-size: 12px;
+        color: #a78bfa;
+    }
+
     .hero-subtitle {
         color: #a78bfa;
         font-size: 14px;
@@ -128,56 +160,57 @@ components.html("""
         box-shadow: 0 0 10px rgba(192, 132, 252, 0.5);
     }
 
-    /* ====== CUSTOM MODAL POP-UP ====== */
-    .custom-modal-overlay {
-        display: none;
-        position: fixed;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.6);
-        z-index: 100;
-        justify-content: center;
-        align-items: center;
-    }
+    /* ====== CUSTOM MODAL (DROPDOWN DI BAWAH) ====== */
     .custom-modal-box {
-        background: linear-gradient(135deg, #1a0033 0%, #2a0a4a 100%);
-        border: 1px solid #7c3aed;
-        border-radius: 12px;
-        padding: 20px;
-        max-width: 450px;
-        width: 80%;
-        box-shadow: 0 0 40px rgba(124, 58, 237, 0.6);
-        color: #e0d0ff;
-        text-align: left;
+        display: none;
         position: relative;
+        margin-top: 15px; 
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid #7c3aed;
+        border-left: 4px solid #c084fc;
+        border-radius: 8px;
+        padding: 15px 20px;
+        width: 100%;
+        box-sizing: border-box;
+        z-index: 10;
+        animation: fadeIn 0.3s ease-in-out;
     }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
     .custom-modal-title {
         color: #c084fc;
-        font-size: 18px;
+        font-size: 16px;
         margin-top: 0;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
         font-weight: bold;
     }
     .custom-modal-body {
         font-size: 14px;
         line-height: 1.6;
+        color: #e0d0ff;
     }
     .custom-modal-close {
-        background: #7c3aed;
-        color: white;
-        border: none;
-        padding: 8px 16px;
+        background: rgba(124, 58, 237, 0.2);
+        color: #c084fc;
+        border: 1px solid #7c3aed;
+        padding: 5px 12px;
         border-radius: 6px;
         cursor: pointer;
-        margin-top: 15px;
-        font-weight: bold;
+        margin-top: 10px;
+        font-size: 12px;
         float: right;
     }
     .custom-modal-close:hover {
-        background: #c084fc;
+        background: #7c3aed;
+        color: white;
     }
 </style>
 
-<div class="hero-header">
+<div class="hero-header" id="heroHeader">
     <div class="snake-container">
         <div class="snake-segment"></div><div class="snake-segment"></div><div class="snake-segment"></div>
         <div class="snake-segment"></div><div class="snake-segment"></div><div class="snake-segment"></div>
@@ -188,7 +221,15 @@ components.html("""
     <div class="hero-content">
         <div class="hero-icon">🌌</div>
         <div style="width: 100%;">
-            <h1 class="hero-title">Galaxy Maze Explorer</h1>
+            <!-- Bagian Judul dan Nama -->
+            <div class="title-container">
+                <h1 class="hero-title">Galaxy Maze Explorer</h1>
+                <div class="student-info">
+                    <span class="student-name">Jumiatul Khusnah</span>
+                    <span class="student-nim">240601110003</span>
+                </div>
+            </div>
+            
             <div class="hero-subtitle">
                 Perbandingan algoritma BFS vs DFS pada labirin antariksa 21×21 — animasi langkah demi langkah
             </div>
@@ -199,16 +240,14 @@ components.html("""
                 <div class="hero-badge" onclick="showModal('Validasi')">Validasi Otomatis</div>
                 <div class="hero-badge" onclick="showModal('Grid')">Grid 21×21</div>
             </div>
+            
+            <div id="infoModal" class="custom-modal-box">
+                <h3 id="modalTitle" class="custom-modal-title">Judul</h3>
+                <div id="modalBody" class="custom-modal-body">Isi penjelasan...</div>
+                <button class="custom-modal-close" onclick="closeModal()">Tutup</button>
+                <div style="clear:both;"></div>
+            </div>
         </div>
-    </div>
-</div>
-
-<!-- Custom Modal HTML -->
-<div id="infoModal" class="custom-modal-overlay">
-    <div class="custom-modal-box">
-        <h3 id="modalTitle" class="custom-modal-title">Judul</h3>
-        <div id="modalBody" class="custom-modal-body">Isi penjelasan...</div>
-        <button class="custom-modal-close" onclick="closeModal()">Tutup</button>
     </div>
 </div>
 
@@ -222,23 +261,22 @@ components.html("""
     };
 
     function showModal(key) {
+        const modal = document.getElementById('infoModal');
         document.getElementById('modalTitle').innerText = key === 'Graf' ? 'Graf Tak Berbobot' : key;
         document.getElementById('modalBody').innerHTML = explanations[key];
-        document.getElementById('infoModal').style.display = 'flex';
+        
+        if (modal.style.display === 'block' && document.getElementById('modalTitle').innerText === key) {
+            modal.style.display = 'none';
+        } else {
+            modal.style.display = 'block';
+        }
     }
 
     function closeModal() {
         document.getElementById('infoModal').style.display = 'none';
     }
-
-    // Menutup modal jika klik di luar kotak
-    document.getElementById('infoModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeModal();
-        }
-    });
 </script>
-""", height=200)
+""", height=260)
 
 # =========================================================
 # DATA LABIRIN (10x10 / Grid 21x21)
@@ -861,11 +899,10 @@ html_code = f"""
 components.html(html_code, height=750)
 
 # =========================================================
-# KETERANGAN UMUM DI BAWAH LABIRIN (Seperti punya temanmu)
+# KETERANGAN UMUM DI BAWAH LABIRIN
 # =========================================================
 st.markdown("---")
 
-# Membuat tab seperti punya temanmu
 tab1, tab2, tab3, tab4 = st.tabs([
     "📊 Perbandingan Algoritma", 
     "🧠 Langkah BFS & DFS", 
