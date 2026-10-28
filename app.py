@@ -11,143 +11,21 @@ st.set_page_config(
     layout="wide",
 )
 
+# CSS Global & Header
 st.markdown("""
 <style>
     .stApp {
         background: radial-gradient(circle at 50% 50%, #1a0033 0%, #0a0014 60%, #000000 100%);
         color: #e0d0ff;
     }
-
-    /* ===== HEADER BANNER ===== */
-    .hero-header {
-        /* Background disamakan dengan tema labirin (ungu gelap) */
-        background: linear-gradient(135deg, #1a0033 0%, #2a0a4a 50%, #150025 100%);
-        border: 1px solid #7c3aed;
-        border-radius: 16px;
-        padding: 20px 28px;
-        margin-bottom: 20px;
-        box-shadow: 0 0 30px rgba(124, 58, 237, 0.25);
-        display: flex;
-        align-items: flex-start;
-        gap: 18px;
-        position: relative;
-        overflow: hidden; /* Agar ulat tidak keluar */
-    }
-
-    /* Animasi Ular/Ulat Berjalan di Background Header */
-    .snake-bg {
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        pointer-events: none;
-        z-index: 0;
-        opacity: 0.15; /* Dibuat transparan agar teks tetap terbaca */
-    }
-    .snake-segment {
-        position: absolute;
-        width: 16px; height: 16px;
-        background-color: #c084fc;
-        border-radius: 50%;
-        box-shadow: 0 0 10px #c084fc;
-        animation: moveSnake 8s linear infinite;
-    }
-    /* Keyframes untuk ulat berjalan zigzag */
-    @keyframes moveSnake {
-        0%   { top: 10%; left: -5%; }
-        15%  { top: 50%; left: 15%; }
-        30%  { top: 80%; left: 30%; }
-        45%  { top: 20%; left: 50%; }
-        60%  { top: 70%; left: 65%; }
-        75%  { top: 30%; left: 80%; }
-        100% { top: 50%; left: 105%; }
-    }
-    /* Menunda animasi tiap segmen agar terlihat seperti ular menyambung */
-    .snake-segment:nth-child(2) { animation-delay: 0.2s; }
-    .snake-segment:nth-child(3) { animation-delay: 0.4s; }
-    .snake-segment:nth-child(4) { animation-delay: 0.6s; }
-    .snake-segment:nth-child(5) { animation-delay: 0.8s; }
-    .snake-segment:nth-child(6) { animation-delay: 1.0s; }
-    .snake-segment:nth-child(7) { animation-delay: 1.2s; }
-    .snake-segment:nth-child(8) { animation-delay: 1.4s; }
-    .snake-segment:nth-child(9) { animation-delay: 1.6s; }
-    .snake-segment:nth-child(10){ animation-delay: 1.8s; }
-
-    .hero-content {
-        position: relative;
-        z-index: 1; /* Agar konten di atas animasi ulat */
-        display: flex;
-        align-items: flex-start;
-        gap: 18px;
-        width: 100%;
-    }
-
-    .hero-icon {
-        font-size: 42px;
-        background: rgba(124, 58, 237, 0.15);
-        border: 1px solid #7c3aed;
-        border-radius: 14px;
-        padding: 10px 14px;
-        line-height: 1;
-    }
-    .hero-title {
-        font-size: 32px;
-        font-weight: 800;
-        color: #c084fc;
-        margin: 0;
-        text-shadow: 0 0 20px rgba(192, 132, 252, 0.4);
-        font-family: 'Trebuchet MS', sans-serif;
-    }
-    .hero-subtitle {
-        color: #a78bfa;
-        font-size: 14px;
-        margin: 6px 0 12px 0;
-    }
-    .hero-badges {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-    
-    /* Badge Interaktif */
-    .hero-badge {
-        background: rgba(124, 58, 237, 0.15);
-        border: 1px solid #7c3aed;
-        color: #c084fc;
-        font-size: 12px;
-        padding: 6px 14px;
-        border-radius: 999px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s;
-        user-select: none;
-    }
-    .hero-badge:hover {
-        background: rgba(124, 58, 237, 0.4);
-        transform: scale(1.05);
-        box-shadow: 0 0 10px rgba(192, 132, 252, 0.5);
-    }
-    
-    /* Panel Penjelasan Badge */
-    .badge-explanation {
-        display: none;
-        width: 100%;
-        margin-top: 15px;
-        padding: 10px 15px;
-        background: rgba(0, 0, 0, 0.4);
-        border-left: 4px solid #c084fc;
-        border-radius: 8px;
-        font-size: 13px;
-        color: #e0d0ff;
-        line-height: 1.5;
-    }
 </style>
 """, unsafe_allow_html=True)
 
 # =========================================================
-# HERO HEADER DENGAN ULAT BERJALAN & BADGE INTERAKTIF
+# HERO HEADER DENGAN ULAT BERJALAN JELAS & BADGE INTERAKTIF
 # =========================================================
 st.components.v1.html("""
 <style>
-    /* Style khusus dimasukkan ke dalam iframe agar terisolasi */
     body { margin: 0; font-family: 'Trebuchet MS', sans-serif; }
     .hero-header {
         background: linear-gradient(135deg, #1a0033 0%, #2a0a4a 50%, #150025 100%);
@@ -159,33 +37,36 @@ st.components.v1.html("""
         align-items: flex-start;
         position: relative;
         overflow: hidden;
+        height: 180px; /* Tinggi fix agar rapi */
     }
 
-    /* Animasi Ular/Ulat Berjalan */
-    .snake-bg {
+    /* Animasi Ular/Ulat Berjalan - Dibuat lebih jelas */
+    .snake-container {
         position: absolute;
         top: 0; left: 0; width: 100%; height: 100%;
         pointer-events: none;
         z-index: 0;
-        opacity: 0.2;
     }
     .snake-segment {
         position: absolute;
-        width: 14px; height: 14px;
+        width: 12px; height: 12px;
         background-color: #c084fc;
         border-radius: 50%;
-        box-shadow: 0 0 10px #c084fc;
-        animation: moveSnake 8s linear infinite;
+        box-shadow: 0 0 12px #c084fc, 0 0 24px #7c3aed;
+        animation: moveSnake 10s linear infinite;
+        opacity: 0.8;
     }
+    /* Membuat efek ular menyambung dengan delay */
     @keyframes moveSnake {
-        0%   { top: 10%; left: -5%; }
-        15%  { top: 50%; left: 15%; }
-        30%  { top: 80%; left: 30%; }
-        45%  { top: 20%; left: 50%; }
-        60%  { top: 70%; left: 65%; }
-        75%  { top: 30%; left: 80%; }
-        100% { top: 50%; left: 105%; }
+        0%   { top: 10%; left: -5%;  transform: scale(1); }
+        15%  { top: 60%; left: 15%;  transform: scale(0.9); }
+        30%  { top: 80%; left: 30%;  transform: scale(1.1); }
+        45%  { top: 20%; left: 50%;  transform: scale(0.9); }
+        60%  { top: 70%; left: 65%;  transform: scale(1); }
+        75%  { top: 30%; left: 80%;  transform: scale(0.8); }
+        100% { top: 50%; left: 105%; transform: scale(1); }
     }
+    .snake-segment:nth-child(1) { animation-delay: 0.0s; }
     .snake-segment:nth-child(2) { animation-delay: 0.2s; }
     .snake-segment:nth-child(3) { animation-delay: 0.4s; }
     .snake-segment:nth-child(4) { animation-delay: 0.6s; }
@@ -195,6 +76,8 @@ st.components.v1.html("""
     .snake-segment:nth-child(8) { animation-delay: 1.4s; }
     .snake-segment:nth-child(9) { animation-delay: 1.6s; }
     .snake-segment:nth-child(10){ animation-delay: 1.8s; }
+    .snake-segment:nth-child(11){ animation-delay: 2.0s; }
+    .snake-segment:nth-child(12){ animation-delay: 2.2s; }
 
     .hero-content {
         position: relative;
@@ -204,7 +87,6 @@ st.components.v1.html("""
         gap: 18px;
         width: 100%;
     }
-
     .hero-icon {
         font-size: 42px;
         background: rgba(124, 58, 237, 0.15);
@@ -230,8 +112,6 @@ st.components.v1.html("""
         flex-wrap: wrap;
         gap: 8px;
     }
-    
-    /* Badge Interaktif */
     .hero-badge {
         background: rgba(124, 58, 237, 0.15);
         border: 1px solid #7c3aed;
@@ -249,25 +129,12 @@ st.components.v1.html("""
         transform: scale(1.05);
         box-shadow: 0 0 10px rgba(192, 132, 252, 0.5);
     }
-    
-    /* Panel Penjelasan Badge */
-    .badge-explanation {
-        display: none;
-        width: 100%;
-        margin-top: 15px;
-        padding: 10px 15px;
-        background: rgba(0, 0, 0, 0.4);
-        border-left: 4px solid #c084fc;
-        border-radius: 8px;
-        font-size: 13px;
-        color: #e0d0ff;
-        line-height: 1.5;
-    }
 </style>
 
 <div class="hero-header">
-    <!-- Animasi Ular Latar Belakang -->
-    <div class="snake-bg">
+    <div class="snake-container">
+        <div class="snake-segment"></div>
+        <div class="snake-segment"></div>
         <div class="snake-segment"></div>
         <div class="snake-segment"></div>
         <div class="snake-segment"></div>
@@ -294,9 +161,6 @@ st.components.v1.html("""
                 <div class="hero-badge" onclick="showInfo('Validasi')">Validasi Otomatis</div>
                 <div class="hero-badge" onclick="showInfo('Grid')">Grid 21×21</div>
             </div>
-            
-            <!-- Tempat Penjelasan -->
-            <div id="badgeExplanation" class="badge-explanation"></div>
         </div>
     </div>
 </div>
@@ -309,22 +173,14 @@ st.components.v1.html("""
         'Validasi': '<b>Validasi Otomatis:</b> Sistem memeriksa apakah jalur menembus dinding dan membuktikan BFS selalu menemukan jalur minimum.',
         'Grid': '<b>Grid 21×21:</b> Labirin berukuran 21 baris dan 21 kolom. Titik awal (Astronot) dan target (UFO) dapat dipindahkan.'
     };
-
     function showInfo(key) {
-        const box = document.getElementById('badgeExplanation');
-        if (box.style.display === 'block' && box.innerHTML === explanations[key]) {
-            // Jika diklik lagi, sembunyikan
-            box.style.display = 'none';
-        } else {
-            box.innerHTML = explanations[key];
-            box.style.display = 'block';
-        }
+        alert(explanations[key].replace(/<[^>]*>?/gm, '')); // Alert sederhana karena di dalam iframe
     }
 </script>
-""", height=260)
+""", height=200)
 
 # =========================================================
-# DATA LABIRIN (10x10 / Grid 21x21)
+# DATA LABIRIN
 # =========================================================
 maze_raw = """
 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
@@ -941,4 +797,76 @@ html_code = f"""
 </html>
 """
 
+# =========================================================
+# RENDER LABIRIN
+# =========================================================
 components.html(html_code, height=750)
+
+# =========================================================
+# KETERANGAN UMUM DI BAWAH LABIRIN (Seperti punya temanmu)
+# =========================================================
+st.markdown("---")
+
+# Membuat tab seperti punya temanmu
+tab1, tab2, tab3, tab4 = st.tabs([
+    "📊 Perbandingan Algoritma", 
+    "🧠 Langkah BFS & DFS", 
+    "✅ Validasi & Batasan", 
+    "💡 Kesimpulan & Presentasi"
+])
+
+with tab1:
+    st.markdown("""
+    ### Perbandingan BFS vs DFS pada Graf Tak Berbobot
+    
+    | Aspek | BFS (Breadth-First Search) | DFS (Depth-First Search) |
+    | :--- | :--- | :--- |
+    | **Cara Kerja** | Menyebar rata per lapisan (seperti air). | Menyusuri satu lorong sampai buntu (seperti labirin). |
+    | **Struktur Data** | Queue (Antrean) | Stack (Tumpukan) |
+    | **Jaminan Rute Terpendek** | ✅ **Ya**, pada graf tak berbobot. | ❌ **Tidak**, bisa saja memutar/muter. |
+    | **Jumlah Titik Diperiksa** | Cenderung lebih banyak (karena menyebar). | Cenderung lebih sedikit (jika beruntung). |
+    | **Penggunaan Memori** | Lebih boros (menyimpan banyak antrean). | Lebih hemat (hanya menyimpan jalur aktif). |
+    
+    > **Mengapa BFS menjamin rute terpendek?** Karena BFS mengunjungi semua simpul pada jarak *k* sebelum mengunjungi simpul pada jarak *k+1*. Jadi, saat pertama kali mencapai target, itu pasti melalui jalur terpendek.
+    """)
+
+with tab2:
+    st.markdown("""
+    ### Bagaimana Algoritma Bekerja Langkah demi Langkah?
+    
+    **1. Inisialisasi:**
+    - Tentukan titik awal (Astronot 👨‍🚀) dan target (UFO 🛸).
+    - Siapkan struktur data (Queue untuk BFS, Stack untuk DFS).
+    
+    **2. Proses Pencarian:**
+    - **BFS:** Masukkan titik awal ke antrean. Selama antrean tidak kosong, ambil titik terdepan, periksa tetangganya (Bawah, Atas, Kanan, Kiri), dan masukkan yang belum dikunjungi ke belakang antrean.
+    - **DFS:** Masukkan titik awal ke tumpukan. Ambil titik teratas, langsung telusuri satu tetangga sedalam mungkin. Jika buntu, *backtrack* (mundur) dengan mengambil tumpukan sebelumnya.
+    
+    **3. Urutan Tetangga (Penting!):**
+    - Aplikasi ini menggunakan urutan yang konsisten: **Bawah → Atas → Kanan → Kiri**.
+    - Ini penting agar perbandingan jumlah titik yang diperiksa bisa **diulang (reproducible)**. Jika urutannya diubah, hasilnya bisa berbeda.
+    """)
+
+with tab3:
+    st.markdown("""
+    ### Validasi Hasil & Batasan Interpretasi
+    
+    **✅ Validasi yang Dilakukan Aplikasi:**
+    - **Bebas Dinding:** Memeriksa apakah setiap langkah pada jalur akhir (rute sukses) hanya melewati nilai `0` pada matriks labirin.
+    - **Jaminan Minimum:** Aplikasi membandingkan panjang lintasan BFS dan DFS secara langsung. BFS harus selalu \( \le \) DFS.
+    
+    **⚠️ Batasan Interpretasi:**
+    - **Jumlah titik diperiksa tidak mutlak.** DFS bisa memeriksa lebih sedikit titik jika kebetulan menemukan target di lorong pertama yang disusuri. Begitu pula sebaliknya.
+    - **Bergantung pada Urutan Tetangga.** Jika urutan prioritas arah diubah (misal: Kanan dulu, baru Bawah), grafik animasi dan jumlah kunjungan akan berubah total.
+    """)
+
+with tab4:
+    st.markdown("""
+    ### Menjawab Pertanyaan Presentasi
+    
+    **Tanya: Mengapa BFS menjamin lintasan terpendek pada graf tak berbobot, sementara DFS kadang memeriksa lebih sedikit titik?**
+    
+    **Jawab:**
+    1. **BFS Menjamin Terpendek:** BFS menyebar secara radial. Ia menjamin bahwa saat pertama kali mencapai target, ia telah memeriksa *semua* jalur yang lebih pendek. Karena semua sisi berbobot sama (1), rute pertama yang ditemukan pasti yang terpendek.
+    2. **DFS Lebih Sedikit Titik:** DFS tidak peduli jarak. Jika target kebetulan berada di ujung jalur yang pertama kali disusuri (beruntung), DFS akan menemukannya dengan sangat cepat tanpa perlu memeriksa cabang-cabang lain. Inilah alasan DFS kadang lebih efisien dalam kasus tertentu, meski rute yang dihasilkan belum tentu terpendek.
+    """)
